@@ -1,0 +1,43 @@
+body {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+}
+
+header {
+    max-width: 100%;
+    background-color: #EBEBEB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+}
+
+nav {
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav div:first-child {
+    display: flex;
+    align-items: center;
+}
+
+nav div:first-child img {
+    width: 45px;
+    margin-right: 20px;
+}
+
+nav div:last-child a {
+    text-decoration: none;
+    color: #00000096;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+nav div:last-child a:last-child {
+    background-color: #00000096;
+    color: #FFF;
+}
