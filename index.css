@@ -1,5 +1,6 @@
 body {
     font-family: "Inter", sans-serif;
+    height: 100vh;
     margin: 0;
 }
 
@@ -100,4 +101,29 @@ section article:last-child div p {
 section article:last-child div svg {
     width: 15px;
     height: 15px;
+}
+
+footer {
+    width: 100%;
+    background-color: #ebebeb;
+    padding: 20px 0;
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer p + div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+footer p + div a {
+    text-decoration: none;
+    color: #454545;
+}
+
+footer img {
+    width: 70px;
 }
