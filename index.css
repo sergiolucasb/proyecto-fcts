@@ -43,6 +43,10 @@ nav div:last-child a:last-child {
     color: #FFF;
 }
 
+nav div:last-child a:hover:not(nav div:last-child a:last-child) {
+    text-decoration: underline;
+}
+
 section {
     display: flex;
     flex-direction: column;
@@ -55,53 +59,103 @@ section h2 {
     font-size: 2.2em;
 }
 
-section form {
+section > form {
     display: flex;
-    justify-content: center;
-    width: 25%;
-    gap: 10px;
+    width: 70%;
+    flex-direction: column;
+    align-items: center;
+}
+
+section > form article#filtros_busqueda {
     margin-bottom: 40px;
 }
 
-section form input[type=text]{
-    width: 60%;
-    padding: 4px 7px;
+section > form article#filtros_busqueda input[type=text]{
+    padding: 7px;
+    border: 2px solid #adadad;
     border-radius: 4px;
-    border: 1px solid #E0E0E0;
-    color: #414141;
 }
 
-section form input[type=submit] {
-    width: 20%;
-    border: none;
-    border-radius: 4px;
-    padding: 7px 10px;
-    color: #e0e0e0;
-    background-color: rgb(82, 82, 82);
+section > form article#filtros_busqueda input[type=text]:focus {
+    outline: none;
 }
 
-section article:last-child {
-    width: 70%;
+section > form article#filtros_busqueda input[type=submit] {
+    padding: 7px;
+    border: 2px solid #606060;
+    border-radius: 4px;
+    background-color: #606060;
+    color: #fff;
+}
+
+section > form article#filtros_busqueda input[type=submit]:hover {
+    cursor: pointer;
+    background-color: #3e3e3e;
+}
+
+
+section > form article#listado {
     display: flex;
     flex-direction: column;
-
+    width: 100%;
 }
 
-section article:last-child div {
+section > form article#listado div{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #828282;
+    padding: 12px 0;
+    border-bottom: 1px solid #adadad;
 }
 
-section article:last-child div p {
-    margin: 12px 0;
+section > form article#listado div:hover:not(section > form article#listado div:first-child) {
+    background-color: #ececec;
 }
 
-section article:last-child div svg {
+section > form article#listado div svg {
     width: 15px;
-    height: 15px;
 }
+
+section > form article#listado div p {
+    margin: 0;
+}
+
+section > form article#paginador {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+section > form article#paginador input {
+    background-color: #dbdbdb;
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+}
+
+section > form article#paginador input:hover:not(section > form article#paginador input[type=text]) {
+    cursor: pointer;
+    background-color: #c9c9c9;
+}
+
+section > form article#paginador input[type=text] {
+    text-align: center;
+    width: 20px;
+}
+
+section > form article#paginador input:focus {
+    outline: none;
+}
+
+section > form input#preferencia_submit {
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+}
+
 
 footer {
     width: 100%;
