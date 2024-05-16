@@ -26,7 +26,7 @@
     }
     
     if (!isset($_SESSION['nia'])) {
-        header("Location: login.php");
+        header("Location: http://localhost/proyecto-fcts/login.php");
         exit(); 
     }
 
@@ -117,7 +117,7 @@
             <div>
                 <a href="mis_empresas.php">Mis empresas</a>
                 <a href="#">Editar perfil</a>
-                <a href="?logout=1" onclick="session_destroy()">Salir</a>
+                <a href="login.php" onclick="session_destroy()">Salir</a>
             </div>
         </nav>
     </header>
