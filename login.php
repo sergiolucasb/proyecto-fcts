@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 <?php
@@ -48,15 +52,33 @@
             }
         }
 ?>
+    <header>
+        <nav>
+            <div>
+                <a href="lisatdo_empresas.php">
+                    <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
+                </a>
+                <p>GESTION FCTs EFA EL CAMPICO</p>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <h2>Iniciar sesión</h2>
+        <form action="login.php" method="POST">
+            <input type="text" id="nia" name="nia" placeholder="Introduce tu NIA...">
+            <input type="password" id="password" name="password" placeholder="Introduce tu contraseña...">
+            <input type="submit" name="btnacceder" value="Entrar">
+        </form> 
+    </section>
+    <footer>
+        <p>FCTs EFA El Campico</p>
+        <div>
+            <a href="#">Contacto</a>
+            <a href="https://www.elcampico.org/">Mi centro</a>
+        </div>
+        <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
+    </footer>
 
-    <h2>Iniciar sesión</h2>
-    <form action="login.php" method="POST">
-        <label for="username">Numero NIA:</label><br>
-        <input type="text" id="nia" name="nia"><br>
-        <label for="password">Contraseña:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" name="btnacceder"   value="Iniciar sesión">
-    </form> 
 
 
 </body>

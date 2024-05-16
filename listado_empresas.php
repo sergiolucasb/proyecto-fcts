@@ -24,13 +24,6 @@
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
 
-    
-    if (!isset($_SESSION['nia'])) {
-        
-        header("Location: login.php");
-        exit(); 
-    }
-
 
 
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
@@ -105,8 +98,6 @@
 </head>
 
 <body>
-    <?php
-    ?>
     <header>
         <nav>
             <div>
@@ -143,7 +134,7 @@
                     echo "<p>" . $row['nombre'] . "</p>";
                     echo "<p>" . $row['telefono'] . "</p>";
                     echo "<a href='#'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill='#000000' d='M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64h96v80c0 6.1 3.4 11.6 8.8 14.3s11.9 2.1 16.8-1.5L309.3 416H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64z'/></svg></a>";
-                    echo "<select name='preferencia' id='preferencia'>";
+                    echo "<select name='preferencia'>";
                     echo "<option value='1'>1</option>";
                     echo "<option value='2'>2</option>";
                     echo "<option value='3'>3</option>";
@@ -174,7 +165,6 @@
                     <input type="submit" name="paginador_submit" id="paginador_submit" value="Ir">
                 </div>
             </article>
-            <a href="listado_empresas.php" onclick="if(hayCambiosPendientes()) {guardarCambios()}">Siguiente Página</a>
             <input type="submit" name="preferencia_submit" id="preferencia_submit" value="Confirmar selección">
         </form>
     </section>
@@ -187,19 +177,4 @@
         <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
     </footer>
 </body>
-<script>
-    
-    // Función para verificar si hay cambios pendientes
-    function hayCambiosPendientes() {
-        var mensaje = "Hay cambion pendientes quieres guardar"
-        // Aquí puedes implementar la lógica para verificar si hay cambios pendientes
-        // Por ejemplo, si hay campos de entrada que han sido modificados
-        return true; // Devuelve true si hay cambios pendientes, de lo contrario, devuelve false
-    }
-
-    // Función para guardar los cambios antes de cambiar de página
-    function guardarCambios() {
-        confirm("Se han realizado cambios de preferencia.¿Deas guardar estos cambios?");
-    }
-</script>
 </html>

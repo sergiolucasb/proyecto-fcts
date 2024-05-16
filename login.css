@@ -1,0 +1,99 @@
+body {
+    font-family: "Inter", sans-serif;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    max-width: 100%;
+    background-color: #EBEBEB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    margin-bottom: 100px;
+}
+
+nav {
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav div:first-child {
+    display: flex;
+    align-items: center;
+}
+
+nav div:first-child img {
+    width: 45px;
+    margin-right: 20px;
+}
+
+header + section {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 150px;
+}
+
+header + section h2 {
+    font-size: 2em;
+}
+
+header + section form {
+    display: flex;
+    width: 300px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+header + section form input {
+    width: 300px;
+    padding: 5px 10px;
+    border: 2px solid #E0E0E0;
+    border-radius: 5px;
+}
+
+header + section form input[type=submit] {
+    background-color: #000;
+    color: #fff;
+    padding: 7px 20px;
+}
+
+header + section form input[type=submit]:hover {
+    cursor: pointer;
+}
+
+header + section form input:focus {
+    outline: none;
+}
+
+footer {
+    clear: both;
+    width: 100%;
+    background-color: #ebebeb;
+    padding: 20px 0;
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer p + div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+footer p + div a {
+    text-decoration: none;
+    color: #454545;
+}
+
+footer img {
+    width: 70px;
+}
