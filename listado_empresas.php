@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,26 +11,35 @@
     <title>Listado empresas</title>
 
     <?php
-    $host='localhost';
-    $dbname='gestion_fct';
-    $user='root';
-    $pass='';
-    
+    include 'auth.php';
+    $host = 'localhost';
+    $dbname = 'proyect-fcts';
+    $user = 'root';
+    $pass = '';
+
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-        $pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
-        catch(PDOException $e) {
-        echo "Se ha producido un error al intentar conectar al servidor MySQL: ".$e->getMessage();
-    }     
+
     
+    if (!isset($_SESSION['nia'])) {
+        
+        header("Location: login.php");
+        exit(); 
+    }
+
+
+
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
 
     $sql = "SELECT nombre, telefono FROM empresa where true";
-    $datos=[];
+    $datos = [];
 
-    if(!empty($nombre_empresa)) {
-        $sql.= " and nombre like :nombre";
+    if (!empty($nombre_empresa)) {
+        $sql .= " and nombre like :nombre";
         $datos[':nombre'] = '%' . $nombre_empresa . '%';
     }
 
@@ -42,7 +52,7 @@
     $total_empresas = $total_resultados->fetchColumn();
     $resultados_por_pagina = 10;
 
-    $total_paginas = ceil($total_empresas/$resultados_por_pagina);
+    $total_paginas = ceil($total_empresas / $resultados_por_pagina);
 
     $pagina_primera = $_POST['pagina_primera'] ?? null;
     $pagina_anterior = $_POST['pagina_anterior'] ?? null;
@@ -73,15 +83,15 @@
         $pagina_actual = $total_paginas;
     }
 
-    if(!empty($paginador_submit)) {
+    if (!empty($paginador_submit)) {
         $pagina_actual = $pagina_deseada;
     }
 
-    
-    
 
 
-    
+
+
+
     $variable_paginas = ($pagina_actual - 1) * $resultados_por_pagina;
 
     $sql .= " LIMIT $variable_paginas, $resultados_por_pagina";
@@ -91,18 +101,16 @@
 
     $consulta = $pdo->prepare($sql);
     $consulta->execute($datos);
-
-    
-    
     ?>
 </head>
+
 <body>
     <?php
     ?>
     <header>
         <nav>
             <div>
-                <a href="index.php">
+                <a href="lisatdo_empresas.php">
                     <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
                 </a>
                 <p>GESTION FCTs EFA EL CAMPICO</p>
@@ -110,13 +118,13 @@
             <div>
                 <a href="mis_empresas.php">Mis empresas</a>
                 <a href="#">Editar perfil</a>
-                <a href="#">Salir</a>
+                <a href="login.php" onclick="session_destroy()">Salir</a>
             </div>
         </nav>
     </header>
     <section>
         <h2>Listado de empresas</h2>
-        <form action="index.php" method="post">
+        <form action="listado_empresas.php" method="post">
             <article id="filtros_busqueda">
                 <input type="text" placeholder="Buscar por nombre" name="nombre_empresa">
                 <input type="submit" value="Buscar" name="filtros_submit">
@@ -130,26 +138,26 @@
                     <p>Preferencia</p>
                 </div>
                 <?php
-                    while ($row = $consulta->fetch()) {
-                        echo "<div>";
-                        echo "<p>".$row['nombre']."</p>";
-                        echo "<p>".$row['telefono']."</p>";
-                        echo "<a href='#'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill='#000000' d='M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64h96v80c0 6.1 3.4 11.6 8.8 14.3s11.9 2.1 16.8-1.5L309.3 416H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64z'/></svg></a>";
-                        echo "<select name='preferencia' id='preferencia'>";
-                        echo "<option value='1'>1</option>";                   
-                        echo "<option value='2'>2</option>";                   
-                        echo "<option value='3'>3</option>";                   
-                        echo "<option value='4'>4</option>";                   
-                        echo "<option value='5'>5</option>";                   
-                        echo "<option value='6'>6</option>";                   
-                        echo "<option value='7'>7</option>";                   
-                        echo "<option value='8'>8</option>";                   
-                        echo "<option value='8'>8</option>";                   
-                        echo "<option value='9'>9</option>";                   
-                        echo "<option value='10'>10</option>";              
-                        echo "</select>";
-                        echo "</div>";
-                    }
+                while ($row = $consulta->fetch()) {
+                    echo "<div>";
+                    echo "<p>" . $row['nombre'] . "</p>";
+                    echo "<p>" . $row['telefono'] . "</p>";
+                    echo "<a href='#'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill='#000000' d='M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64h96v80c0 6.1 3.4 11.6 8.8 14.3s11.9 2.1 16.8-1.5L309.3 416H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64z'/></svg></a>";
+                    echo "<select name='preferencia' id='preferencia'>";
+                    echo "<option value='1'>1</option>";
+                    echo "<option value='2'>2</option>";
+                    echo "<option value='3'>3</option>";
+                    echo "<option value='4'>4</option>";
+                    echo "<option value='5'>5</option>";
+                    echo "<option value='6'>6</option>";
+                    echo "<option value='7'>7</option>";
+                    echo "<option value='8'>8</option>";
+                    echo "<option value='8'>8</option>";
+                    echo "<option value='9'>9</option>";
+                    echo "<option value='10'>10</option>";
+                    echo "</select>";
+                    echo "</div>";
+                }
                 ?>
 
             </article>
@@ -158,14 +166,15 @@
                 <div>
                     <input type="submit" name="pagina_primera" value="<<">
                     <input type="submit" name="pagina_anterior" value="<">
-                    <input type="text" name="pagina_deseada" value="<?php echo $pagina_actual?>" pattern="[1-9]|<?php echo $total_paginas?>">
-                    <input type="submit" name="pagina_siguiente" value=">">
+                    <input type="text" name="pagina_deseada" value="<?php echo $pagina_actual ?>" pattern="[1-9]|<?php echo $total_paginas ?>">
+                    <input type="submit" name="pagina_siguiente" value=">" onclick="if(hayCambiosPendientes()) {guardarCambios()}">
                     <input type="submit" name="pagina_ultima" value=">>">
                 </div>
                 <div>
                     <input type="submit" name="paginador_submit" id="paginador_submit" value="Ir">
                 </div>
             </article>
+            <a href="listado_empresas.php" onclick="if(hayCambiosPendientes()) {guardarCambios()}">Siguiente Página</a>
             <input type="submit" name="preferencia_submit" id="preferencia_submit" value="Confirmar selección">
         </form>
     </section>
@@ -178,4 +187,19 @@
         <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
     </footer>
 </body>
+<script>
+    
+    // Función para verificar si hay cambios pendientes
+    function hayCambiosPendientes() {
+        var mensaje = "Hay cambion pendientes quieres guardar"
+        // Aquí puedes implementar la lógica para verificar si hay cambios pendientes
+        // Por ejemplo, si hay campos de entrada que han sido modificados
+        return true; // Devuelve true si hay cambios pendientes, de lo contrario, devuelve false
+    }
+
+    // Función para guardar los cambios antes de cambiar de página
+    function guardarCambios() {
+        confirm("Se han realizado cambios de preferencia.¿Deas guardar estos cambios?");
+    }
+</script>
 </html>
