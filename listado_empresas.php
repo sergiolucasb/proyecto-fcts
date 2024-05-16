@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,10 +24,8 @@
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
-
     
     if (!isset($_SESSION['nia'])) {
-        
         header("Location: login.php");
         exit(); 
     }
@@ -101,6 +100,8 @@
 
     $consulta = $pdo->prepare($sql);
     $consulta->execute($datos);
+
+   
     ?>
 </head>
 
@@ -118,7 +119,7 @@
             <div>
                 <a href="mis_empresas.php">Mis empresas</a>
                 <a href="#">Editar perfil</a>
-                <a href="login.php" onclick="session_destroy()">Salir</a>
+                <a href="?logout=1" onclick="session_destroy()">Salir</a>
             </div>
         </nav>
     </header>
@@ -158,6 +159,7 @@
                     echo "</select>";
                     echo "</div>";
                 }
+                
                 ?>
 
             </article>
