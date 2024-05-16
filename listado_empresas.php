@@ -24,6 +24,13 @@
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
 
+    
+    if (!isset($_SESSION['nia'])) {
+        
+        header("Location: login.php");
+        exit(); 
+    }
+
 
 
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
@@ -165,6 +172,7 @@
                     <input type="submit" name="paginador_submit" id="paginador_submit" value="Ir">
                 </div>
             </article>
+            <a href="listado_empresas.php" onclick="if(hayCambiosPendientes()) {guardarCambios()}">Siguiente Página</a>
             <input type="submit" name="preferencia_submit" id="preferencia_submit" value="Confirmar selección">
         </form>
     </section>

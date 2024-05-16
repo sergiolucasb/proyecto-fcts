@@ -11,6 +11,7 @@
 </head>
 <body>
 <?php
+
    $host = "localhost";
    $dbname = "proyect-fcts";
    $user = 'root';
@@ -20,22 +21,15 @@
    try {
        $conexion = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
        $conexion->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-
-       }
-
-       catch(PDOException $e) {
-            echo $e->getMessage();
-       }
-       if (!empty($_POST["btnacceder"])){
-
+    } catch(PDOException $e) {
+        echo $e->getMessage();
+    }
+    if (!empty($_POST["btnacceder"])){
         if (empty($_POST["nia"]) and empty($_POST["password"])){
                 echo 'Los campos estan vacios';
-
         } else {
-    
             $nia=$_POST["nia"];
             $password=$_POST["password"];
-
             $sql=$conexion->query(" select * from alumno where nia='$nia' and password='$password' ");
 
             if ($datos=$sql->FETCH()){
@@ -46,11 +40,11 @@
 
                 header("location:listado_empresas.php");
                 exit();
-                }else{
-                    echo 'Usuario o contraseña incorrectos';
-                }
+            }else{
+                echo 'Usuario o contraseña incorrectos';
             }
         }
+    }
 ?>
     <header>
         <nav>
