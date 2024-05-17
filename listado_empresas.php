@@ -23,15 +23,11 @@
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
-
     
     if (!isset($_SESSION['nia'])) {
-        
         header("Location: login.php");
         exit(); 
     }
-
-
 
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
 
@@ -42,8 +38,6 @@
         $sql .= " and nombre like :nombre";
         $datos[':nombre'] = '%' . $nombre_empresa . '%';
     }
-
-
 
     $pagina_actual = $_POST['pagina_deseada'] ?? 1;
     //para calcular el total de paginas
@@ -60,6 +54,13 @@
     $pagina_ultima = $_POST['pagina_ultima'] ?? null;
     $pagina_deseada = $_POST['pagina_desada'] ?? $pagina_actual;
     $paginador_submit = $_POST['paginador_submit'] ?? null;
+
+    $logout = $_POST['logout'] ?? null;
+
+    if (!empty($logout)) {
+        header('location: login.php');
+        session_destroy();
+    }
 
     if (!empty($pagina_primera)) {
         $pagina_actual = 1;
@@ -87,17 +88,9 @@
         $pagina_actual = $pagina_deseada;
     }
 
-
-
-
-
-
     $variable_paginas = ($pagina_actual - 1) * $resultados_por_pagina;
 
     $sql .= " LIMIT $variable_paginas, $resultados_por_pagina";
-
-
-
 
     $consulta = $pdo->prepare($sql);
     $consulta->execute($datos);
@@ -116,7 +109,9 @@
             <div>
                 <a href="mis_empresas.php">Mis empresas</a>
                 <a href="#">Editar perfil</a>
-                <a href="login.php" onclick="session_destroy()">Salir</a>
+                <form action="listado_empresas.php" method="post">
+                    <input type="submit" name="logout" id="logout" value="Salir">
+                </form>
             </div>
         </nav>
     </header>
@@ -165,14 +160,13 @@
                     <input type="submit" name="pagina_primera" value="<<">
                     <input type="submit" name="pagina_anterior" value="<">
                     <input type="text" name="pagina_deseada" value="<?php echo $pagina_actual ?>" pattern="[1-9]|<?php echo $total_paginas ?>">
-                    <input type="submit" name="pagina_siguiente" value=">" onclick="if(hayCambiosPendientes()) {guardarCambios()}">
+                    <input type="submit" name="pagina_siguiente" value=">">
                     <input type="submit" name="pagina_ultima" value=">>">
                 </div>
                 <div>
                     <input type="submit" name="paginador_submit" id="paginador_submit" value="Ir">
                 </div>
             </article>
-            <a href="listado_empresas.php" onclick="if(hayCambiosPendientes()) {guardarCambios()}">Siguiente Página</a>
             <input type="submit" name="preferencia_submit" id="preferencia_submit" value="Confirmar selección">
         </form>
     </section>

@@ -30,6 +30,28 @@ nav div:first-child img {
     margin-right: 20px;
 }
 
+nav div:last-child{
+    display: flex;
+    align-items: center;
+}
+
+nav div:last-child form input{
+    background-color: #606060;
+    padding: 7px 20px;
+    border: none;   
+    border-radius: 3px;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+nav div:last-child form input:hover {
+    cursor: pointer;
+    background-color: #454545;
+
+}
+
 nav div:last-child a {
     text-decoration: none;
     color: #00000096;
