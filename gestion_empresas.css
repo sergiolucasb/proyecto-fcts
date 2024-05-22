@@ -81,7 +81,20 @@ section > form {
 }
 
 section > form article#filtros_busqueda {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+}
+
+section > form article#filtros_busqueda + a {
+    text-decoration: none;
+    color: #242424;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border-bottom: 5px solid #bababa;
+}
+
+section > form article#filtros_busqueda + a:hover {
+    background-color: #bababa;
+    transition: .2s;
 }
 
 section > form article#filtros_busqueda input[type=text]{
@@ -170,3 +183,27 @@ section > form input#preferencia_submit {
     padding: 8px;
 }
 
+footer {
+    width: 100%;
+    background-color: #ebebeb;
+    padding: 20px 0;
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer p + div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+footer p + div a {
+    text-decoration: none;
+    color: #454545;
+}
+
+footer img {
+    width: 70px;
+}
