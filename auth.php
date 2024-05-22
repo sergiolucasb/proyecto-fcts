@@ -6,4 +6,5 @@ if(!isset($_SESSION['nia'])) {
     session_destroy();
 }
 
+
 ?>
