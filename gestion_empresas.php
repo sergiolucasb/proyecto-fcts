@@ -116,8 +116,9 @@
             <article id="filtros_busqueda">
                 <input type="text" placeholder="Buscar por nombre" name="nombre_empresa">
                 <input type="submit" value="Buscar" name="filtros_submit">
-            </article>
 
+            </article>
+            <a href="nueva_empresa.php">Añadir empresa</a>
             <article id="listado">
                 <div>
                     <p>Nombre de la empresa</p>
@@ -165,5 +166,13 @@
             <input type="submit" name="preferencia_submit" id="preferencia_submit" value="Confirmar selección">
         </form>
     </section>
+    <footer>
+        <p>FCTs EFA El Campico</p>
+        <div>
+            <a href="#">Contacto</a>
+            <a href="https://www.elcampico.org/">Mi centro</a>
+        </div>
+        <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
+    </footer>
 </body>
 </html>
