@@ -1,18 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="gestion_empresas.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <title>Listado empresas</title>
-
+    <title>Gestión de empresas</title>
     <?php
-    include 'auth.php';
     $host = 'localhost';
     $dbname = 'proyect-fcts';
     $user = 'root';
@@ -24,14 +20,12 @@
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
-
-    
+    /*
     if (!isset($_SESSION['nia'])) {
-        
         header("Location: login.php");
         exit(); 
     }
-
+    */
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
 
     $sql = "SELECT nombre, telefono FROM empresa where true";
@@ -97,11 +91,8 @@
 
     $consulta = $pdo->prepare($sql);
     $consulta->execute($datos);
-
-   
     ?>
 </head>
-
 <body>
     <header>
         <nav>
@@ -112,8 +103,7 @@
                 <p>GESTION FCTs EFA EL CAMPICO</p>
             </div>
             <div>
-                <a href="mis_empresas.php">Mis empresas</a>
-                <a href="#">Editar perfil</a>
+                <p>GESTIÓN DE EMPRESAS</p>
                 <form action="listado_empresas.php" method="post">
                     <input type="submit" name="logout" id="logout" value="Salir">
                 </form>
@@ -122,7 +112,7 @@
     </header>
     <section>
         <h2>Listado de empresas</h2>
-        <form action="listado_empresas.php" method="post">
+        <form action="gestion_empresas.php" method="post">
             <article id="filtros_busqueda">
                 <input type="text" placeholder="Buscar por nombre" name="nombre_empresa">
                 <input type="submit" value="Buscar" name="filtros_submit">
@@ -156,7 +146,6 @@
                     echo "</select>";
                     echo "</div>";
                 }
-                
                 ?>
 
             </article>
@@ -176,13 +165,5 @@
             <input type="submit" name="preferencia_submit" id="preferencia_submit" value="Confirmar selección">
         </form>
     </section>
-    <footer>
-        <p>FCTs EFA El Campico</p>
-        <div>
-            <a href="#">Contacto</a>
-            <a href="https://www.elcampico.org/">Mi centro</a>
-        </div>
-        <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
-    </footer>
 </body>
 </html>

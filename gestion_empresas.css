@@ -35,6 +35,10 @@ nav div:last-child{
     align-items: center;
 }
 
+nav div:last-child p {
+    margin-right: 20px;
+}
+
 nav div:last-child form input{
     background-color: #606060;
     padding: 7px 20px;
@@ -52,22 +56,10 @@ nav div:last-child form input:hover {
 
 }
 
-nav div:last-child a {
-    text-decoration: none;
-    color: #00000096;
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 5px;
-}
-
-nav div:last-child a:last-child {
-    background-color: #00000096;
-    color: #FFF;
-}
-
 nav div:last-child a:hover:not(nav div:last-child a:last-child) {
     text-decoration: underline;
 }
+
 
 section {
     display: flex;
@@ -178,28 +170,3 @@ section > form input#preferencia_submit {
     padding: 8px;
 }
 
-
-footer {
-    width: 100%;
-    background-color: #ebebeb;
-    padding: 20px 0;
-    margin-top: 70px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-footer p + div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-footer p + div a {
-    text-decoration: none;
-    color: #454545;
-}
-
-footer img {
-    width: 70px;
-}
