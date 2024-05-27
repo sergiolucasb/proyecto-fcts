@@ -131,7 +131,7 @@
                     echo "<div>";
                     echo "<p>" . $row['nombre'] . "</p>";
                     echo "<p>" . $row['telefono'] . "</p>";
-                    echo "<a href='nueva_empresa.php'>Modificar</a>";
+                    echo "<a href='nueva_empresa.php?id=".$row['nombre']."'>Modificar</a>";
                     echo "<select name='preferencia'>";
                     echo "<option value='1'>1</option>";
                     echo "<option value='2'>2</option>";

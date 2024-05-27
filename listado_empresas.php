@@ -27,7 +27,6 @@
 
     
     if (!isset($_SESSION['nia'])) {
-        
         header("Location: login.php");
         exit(); 
     }

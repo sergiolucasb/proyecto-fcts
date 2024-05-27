@@ -20,7 +20,10 @@
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
+    
+    $error = false;
 
+    //RECOGER VARIABLES
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
     $cif = $_POST['cif'] ?? null;
     $nombre_fiscal = $_POST['nombre_fiscal'] ?? null;
@@ -33,7 +36,36 @@
     $persona_contacto = $_POST['persona_contacto'] ?? null;
     $anyadir = $_POST['anyadir'] ?? null;
 
-    $sql = "insert into empresa values (:nombre_empresa, :cif, :nombre_fiscal, :email, :direccion, :localidad, :provincia, :num_plazas, :telefono, :persona_contacto)";
+    $nombre_empresa_modificar = $_GET['id'] ?? null;
+    $nombre_empresa_old = $_POST['nombre_empresa_old'] ?? null;
+
+    //print_r($_POST);
+    //echo $nombre_empresa_modificar;
+    //exit;
+
+    $sql = "insert into empresa values (:nombre_empresa, :cif, :nombre_fiscal, :email, :direccion, :localidad, :provincia, :num_plazas, :telefono, :persona_contacto);";
+
+    $sql_update = "update empresa set nombre = :nombre_empresa, cif = :cif, nombre_fiscal = :nombre_fiscal, email = :email, direccion = :direccion, localidad = :localidad, provincia = :provincia, numero_plazas = :num_plazas, telefono = :telefono, persona_contacto = :persona_contacto where nombre= '".$nombre_empresa_old . "'";
+
+    $sql_select;
+    //si ha pulsado modificar, consulta select sí se hace pero no se asigna la variable?¿?? 
+    if (!empty($nombre_empresa_modificar)) {
+        $sql_select = "select nombre, cif, nombre_fiscal, email, direccion, localidad, provincia, numero_plazas, telefono, persona_contacto from empresa where nombre='". $nombre_empresa_modificar . "';";
+        $consulta_select = $pdo->prepare($sql_select);
+        $consulta_select->execute();
+        if ($row = $consulta_select->fetch()) {
+            $nombre_empresa = $row['nombre'];
+            $cif = $row['cif'];
+            $nombre_fiscal = $row['nombre_fiscal'];
+            $email = $row['email'];
+            $direccion = $row['direccion'];
+            $localidad = $row['localidad'];
+            $provincia = $row['provincia'];
+            $num_plazas = $row['numero_plazas'];
+            $telefono = $row['telefono'];
+            $persona_contacto = $row['persona_contacto'];
+        }
+    }    
 
     $datos = [];
     $datos[':nombre_empresa'] = $nombre_empresa;
@@ -47,40 +79,68 @@
     $datos[':telefono'] = $telefono;
     $datos[':persona_contacto'] = $persona_contacto;
 
-    $error = false;
+
+    //si pulsa en el botón
     if (!empty($anyadir)) {
-        if (!empty($nombre_empresa)) {
-            $consulta = $pdo->prepare($sql);
-            $consulta->execute($datos);
-        } else {
-            $error = true;
+
+        //AÑADIR
+        if (empty($nombre_empresa_old)) {
+            if (!empty($nombre_empresa)) {
+                echo $sql;
+                echo "<br>";
+                echo $nombre_empresa;
+                $consulta = $pdo->prepare($sql);
+                $consulta->execute($datos);
+            } else {
+                $error = true;
+            }
         }
 
+        //MODIFICAR
+        if (!empty($nombre_empresa_old)) {
+            if (!empty($nombre_empresa)) {
+                echo $sql_update;
+                echo "<br>";
+                echo $nombre_empresa;
+                $consulta_update = $pdo->prepare($sql_update);
+                $consulta_update->execute($datos);
+            } else {
+                $error = true;
+            }
+        }
     }
+
     
+
+
 
     ?>
 </head>
 <body>
     <form action="nueva_empresa.php" method="post">
-        <h2>Nueva empresa</h2>
+        <h2>Empresa</h2>
         <?php
         if ($error == true) {
             echo "<p class='error'>Error: El nombre de la empresa no puede estar vacío</p>";
         }
+        echo $nombre_empresa_modificar;
+        echo "<br>";
+
+        
         ?>
-        <input type="text" placeholder="Nombre de la empresa..." name="nombre_empresa">
-        <input type="text" placeholder="CIF..." name="cif">
-        <input type="text" name="nombre_fiscal" placeholder="Nombre fiscal...">
-        <input type="text" name="email" placeholder="Correo electrónico...">
-        <input type="text" name="direccion" placeholder="Dirección...">
-        <input type="text" name="localidad" placeholder="Localidad...">
-        <input type="text" name="provincia" placeholder="Provincia...">
-        <input type="number" name="num_plazas" placeholder="Número de plazas...">
-        <input type="number" name="telefono" placeholder="Teléfono...">
-        <input type="text" name="persona_contacto" placeholder="Persona de contacto...">
+        <input type="text" placeholder="Nombre de la empresa..." name="nombre_empresa" value="<?php echo $nombre_empresa?>">
+        <input type="text" placeholder="CIF..." name="cif" value="<?php echo $cif?>">
+        <input type="text" name="nombre_fiscal" placeholder="Nombre fiscal..." value="<?php echo $nombre_fiscal ?>">
+        <input type="text" name="email" placeholder="Correo electrónico..." value="<?php echo $email ?>">
+        <input type="text" name="direccion" placeholder="Dirección..." value="<?php echo $direccion ?>">
+        <input type="text" name="localidad" placeholder="Localidad..." value="<?php echo $localidad ?>">
+        <input type="text" name="provincia" placeholder="Provincia..." value="<?php echo $provincia ?>">
+        <input type="number" name="num_plazas" placeholder="Número de plazas..." value="<?php echo $num_plazas ?>">
+        <input type="text" name="telefono" placeholder="Teléfono..." value="<?php echo $telefono ?>">
+        <input type="text" name="persona_contacto" placeholder="Persona de contacto..." value="<?php echo $persona_contacto ?>">
         <div>
-            <input type="submit" value="Añadir" name="anyadir">
+            <input type="submit" value="Enviar" name="anyadir">
+            <input type="hidden" value = "<?php echo $nombre_empresa_modificar ?>" name='nombre_empresa_old'>
             <a href="gestion_empresas.php">Volver</a>
         </div>
 
