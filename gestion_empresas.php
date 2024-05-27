@@ -14,6 +14,10 @@
     $user = 'root';
     $pass = '';
 
+    $nombre_empresa = $_POST['nombre'] ?? null;
+    $id = $_GET['id'] ?? null;
+    $telefono = $_POST['telefono'] ?? null;
+
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -132,24 +136,47 @@
                     echo "<p>" . $row['nombre'] . "</p>";
                     echo "<p>" . $row['telefono'] . "</p>";
                     echo "<a href='nueva_empresa.php?id=".$row['nombre']."'>Modificar</a>";
-                    echo "<select name='preferencia'>";
-                    echo "<option value='1'>1</option>";
-                    echo "<option value='2'>2</option>";
-                    echo "<option value='3'>3</option>";
-                    echo "<option value='4'>4</option>";
-                    echo "<option value='5'>5</option>";
-                    echo "<option value='6'>6</option>";
-                    echo "<option value='7'>7</option>";
-                    echo "<option value='8'>8</option>";
-                    echo "<option value='8'>8</option>";
-                    echo "<option value='9'>9</option>";
-                    echo "<option value='10'>10</option>";
-                    echo "</select>";
+                    // Agregar un formulario para cada botón de eliminar
+                    echo "<form action='gestion_empresas.php' method='POST' style='display:inline;'>";
+                    echo "<input type='hidden' name='id' value='" . $row['nombre'] . "'>";
+                    echo "<input type='submit' name='eliminar' value='Eliminar'>";
+                    echo "</form>";
                     echo "</div>";
                 }
+
+                if (isset($_POST['eliminar'])) {
+                    $id = $_POST['id'];
+                    //consulta
+                    $sql = "DELETE FROM empresa WHERE nombre = :id"; 
+                   
+                    $stmt = $pdo->prepare($sql);
+                    //se utiliza paras vincular la variable $id con el :id de la consulta
+                    $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+                    try{
+                        //validamos si la consulrta esta preparada para ejecutarla
+                        if ($stmt->execute()) {
+                            echo "Usuario eliminado con éxito";
+                            echo '<script>window.location.href = "gestion_empresas.php";</script>';
+                        }
+                        //capturamos la excepcion
+                    }catch(PDOException $e){
+                        //Utilizo el codigo del error 2300 ya que es esa la excepcion que manda
+                    if ($e->errorInfo[0] === '23000') {
+                        //aqui muestro el mensaje que yo quiero es decir si no se puede elimnar por tema de foreing key
+                        echo "No se puede eliminar";
+                    } else {
+                        //le muestro otro error alternativo en caso de que sea otra 
+                        echo "Error al eliminar la empresa";
+                    }
+                    }
+                }
+
                 ?>
 
             </article>
+        </form>
+        <form action="gestion_empresas.php" method="POST">
+
 
             <article id="paginador">
                 <div>
