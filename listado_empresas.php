@@ -26,7 +26,7 @@
     }
 
     
-    if (!isset($_SESSION['nia'])) {
+    if (!isset($_SESSION['email'])) {
         header("Location: login.php");
         exit(); 
     }
@@ -60,7 +60,7 @@
     $logout = $_POST['logout'] ?? null;
 
     if (!empty($logout)) {
-        header('location: login.php');
+        header('Location: login.php');
         session_destroy();
     }
 

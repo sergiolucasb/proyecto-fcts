@@ -8,7 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <title>Gestión de empresas</title>
+
+
     <?php
+    include 'auth.php';
     $host = 'localhost';
     $dbname = 'proyect-fcts';
     $user = 'root';
@@ -24,12 +27,12 @@
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
-    /*
-    if (!isset($_SESSION['nia'])) {
+    
+    if (!isset($_SESSION['email'])) {
         header("Location: login.php");
         exit(); 
     }
-    */
+    
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
 
     $sql = "SELECT nombre, telefono FROM empresa where true";
@@ -59,7 +62,7 @@
     $logout = $_POST['logout'] ?? null;
 
     if (!empty($logout)) {
-        header('location: login.php');
+        header('Location: login.php');
         session_destroy();
     }
 
@@ -101,14 +104,14 @@
     <header>
         <nav>
             <div>
-                <a href="lisatdo_empresas.php">
+                <a href="gestion_empresas.php">
                     <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
                 </a>
                 <p>GESTION FCTs EFA EL CAMPICO</p>
             </div>
             <div>
                 <p>GESTIÓN DE EMPRESAS</p>
-                <form action="listado_empresas.php" method="post">
+                <form action="gestion_empresas.php" method="post">
                     <input type="submit" name="logout" id="logout" value="Salir">
                 </form>
             </div>

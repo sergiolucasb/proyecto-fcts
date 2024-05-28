@@ -19,32 +19,40 @@
 
 
    try {
-       $conexion = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-       $conexion->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-    } catch(PDOException $e) {
-        echo $e->getMessage();
-    }
-    if (!empty($_POST["btnacceder"])){
-        if (empty($_POST["nia"]) and empty($_POST["password"])){
-                echo 'Los campos estan vacios';
+    $conexion = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    if (!empty($_POST["btnacceder"])) {
+        if (empty($_POST["email"]) || empty($_POST["pasword"])) {
+            echo 'Los campos están vacíos';
         } else {
-            $nia=$_POST["nia"];
-            $password=$_POST["password"];
-            $sql=$conexion->query(" select * from alumno where nia='$nia' and password='$password' ");
+            $email = $_POST["email"];
+            $password = $_POST["pasword"];
 
-            if ($datos=$sql->FETCH()){
+            // Verificar si el usuario es alumno
+            $sql = $conexion->query("SELECT * FROM alumno WHERE email='$email' AND pasword='$password'");
+            if ($datos = $sql->fetch(PDO::FETCH_ASSOC)) {
                 session_start();
-
-                $_SESSION['nia']=$nia;
-                $_SESSION['nombre']=$query['nombre'];
-
-                header("location:listado_empresas.php");
+                $_SESSION['email'] = $email;
+                header("Location: listado_empresas.php");
                 exit();
-            }else{
-                echo 'Usuario o contraseña incorrectos';
+            } else {
+                // Si no es alumno, verificar si es tutor
+                $sql = $conexion->query("SELECT * FROM tutor WHERE email='$email' AND pasword='$password'");
+                if ($datos = $sql->fetch(PDO::FETCH_ASSOC)) {
+                    session_start();
+                    $_SESSION['email'] = $email;
+                    header("Location: gestion_empresas.php");
+                    exit();
+                } else {
+                    echo 'Usuario o contraseña incorrectos';
+                }
             }
         }
     }
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
 ?>
     <header>
         <nav>
@@ -59,8 +67,8 @@
     <section>
         <h2>Iniciar sesión</h2>
         <form action="login.php" method="POST">
-            <input type="text" id="nia" name="nia" placeholder="Introduce tu NIA...">
-            <input type="password" id="password" name="password" placeholder="Introduce tu contraseña...">
+            <input type="text" id="email" name="email" placeholder="Introduce tu correo...">
+            <input type="password" id="pasword" name="pasword" placeholder="Introduce tu contraseña...">
             <input type="submit" name="btnacceder" value="Entrar">
         </form> 
     </section>
