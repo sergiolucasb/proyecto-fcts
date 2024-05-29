@@ -14,6 +14,7 @@
     $user = 'root';
     $pass = '';
 
+    //conexión a base de datos
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -21,8 +22,6 @@
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
     
-    $error = false;
-
     //RECOGER VARIABLES
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
     $cif = $_POST['cif'] ?? null;
@@ -38,10 +37,6 @@
 
     $nombre_empresa_modificar = $_GET['id'] ?? null;
     $nombre_empresa_old = $_POST['nombre_empresa_old'] ?? null;
-
-    //print_r($_POST);
-    //echo $nombre_empresa_modificar;
-    //exit;
 
     $sql = "insert into empresa values (:nombre_empresa, :cif, :nombre_fiscal, :email, :direccion, :localidad, :provincia, :num_plazas, :telefono, :persona_contacto);";
 
@@ -79,59 +74,30 @@
     $datos[':telefono'] = $telefono;
     $datos[':persona_contacto'] = $persona_contacto;
 
-
     //si pulsa en el botón
     if (!empty($anyadir)) {
 
         //AÑADIR
         if (empty($nombre_empresa_old)) {
-            if (!empty($nombre_empresa)) {
-                echo $sql;
-                echo "<br>";
-                echo $nombre_empresa;
-                $consulta = $pdo->prepare($sql);
-                $consulta->execute($datos);
-                header("Location: gestion_empresas.php");
-                exit; 
-            } else {
-                $error = true;
-            }
+            $consulta = $pdo->prepare($sql);
+            $consulta->execute($datos);
+            header("Location: gestion_empresas.php");
+            exit; 
         }
 
         //MODIFICAR
         if (!empty($nombre_empresa_old)) {
-            if (!empty($nombre_empresa)) {
-                echo $sql_update;
-                echo "<br>";
-                echo $nombre_empresa;
-                $consulta_update = $pdo->prepare($sql_update);
-                $consulta_update->execute($datos);
-                header("Location: gestion_empresas.php");
-                exit;
-            } else {
-                $error = true;
-            }
+            $consulta_update = $pdo->prepare($sql_update);
+            $consulta_update->execute($datos);
+            header("Location: gestion_empresas.php");
+            exit;
         }
     }
-
-    
-
-
-
     ?>
 </head>
 <body>
     <form action="nueva_empresa.php" method="post">
         <h2>Empresa</h2>
-        <?php
-        if ($error == true) {
-            echo "<p class='error'>Error: El nombre de la empresa no puede estar vacío</p>";
-        }
-        echo $nombre_empresa_modificar;
-        echo "<br>";
-
-        
-        ?>
         <input type="text" placeholder="Nombre de la empresa..." name="nombre_empresa" value="<?php echo $nombre_empresa?>" required>
         <input type="text" placeholder="CIF..." name="cif" value="<?php echo $cif?>">
         <input type="text" name="nombre_fiscal" placeholder="Nombre fiscal..." value="<?php echo $nombre_fiscal ?>">
@@ -147,7 +113,6 @@
             <input type="hidden" value = "<?php echo $nombre_empresa_modificar ?>" name='nombre_empresa_old'>
             <a href="gestion_empresas.php">Volver</a>
         </div>
-
     </form>
 </body>
 </html>
