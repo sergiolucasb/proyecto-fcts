@@ -17,38 +17,22 @@
     $user = 'root';
     $pass = '';
 
-    $nombre_empresa = $_POST['nombre'] ?? null;
-    $id = $_GET['id'] ?? null;
-    $telefono = $_POST['telefono'] ?? null;
-
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
+
+    $id = $_GET['id'] ?? null;
     
-    if (!isset($_SESSION['email'])) {
-        header("Location: login.php");
-        exit(); 
-    }
-    
-    $nombre_empresa = $_POST['nombre_empresa'] ?? null;
-    $cif = $_POST['cif'] ?? null;
     $terminos_de_busqueda = $_POST['buscar'] ?? null;
 
     $sql = "SELECT nombre, telefono, cif FROM empresa where true";
     $datos = [];
 
-    if (!empty($nombre_empresa)) {
-        $sql .= " and nombre like :nombre";
-        $datos[':nombre'] = '%' . $nombre_empresa . '%';
-    }
-    if (!empty($cif)) {
-        $sql .= " and cif like :cif";
-        $datos[':cif'] = '%' . $cif . '%';
-    }
 
+    
 
     $pagina_actual = $_POST['pagina_deseada'] ?? 1;
     //para calcular el total de paginas
