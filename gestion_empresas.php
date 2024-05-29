@@ -17,40 +17,27 @@
     $user = 'root';
     $pass = '';
 
-    $nombre_empresa = $_POST['nombre'] ?? null;
-    $id = $_GET['id'] ?? null;
-    $telefono = $_POST['telefono'] ?? null;
-
     try {
+        //creamos la conexion mediante pdo a base de datos
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        
+        //objeto pdo y es como que utiliza la funcion setatribute, PDO::ATTR_ERRMODE, los dos puntos significa static final, y sirven como para manejar los errores
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
     
-    if (!isset($_SESSION['email'])) {
-        header("Location: login.php");
-        exit(); 
-    }
-    
-    $nombre_empresa = $_POST['nombre_empresa'] ?? null;
-    $cif = $_POST['cif'] ?? null;
+    $id = $_GET['id'] ?? null;
     $terminos_de_busqueda = $_POST['buscar'] ?? null;
-
+    
+    //creamos la consulta dentro de la variable 
     $sql = "SELECT nombre, telefono, cif FROM empresa where true";
+
     $datos = [];
 
-    if (!empty($nombre_empresa)) {
-        $sql .= " and nombre like :nombre";
-        $datos[':nombre'] = '%' . $nombre_empresa . '%';
-    }
-    if (!empty($cif)) {
-        $sql .= " and cif like :cif";
-        $datos[':cif'] = '%' . $cif . '%';
-    }
-
-
     $pagina_actual = $_POST['pagina_deseada'] ?? 1;
+
+
     //para calcular el total de paginas
     $total_resultados = $pdo->prepare("SELECT COUNT(*) FROM empresa");
     $total_resultados->execute();
@@ -172,10 +159,10 @@
                     $sql = "DELETE FROM empresa WHERE nombre = :id"; 
                    
                     $stmt = $pdo->prepare($sql);
-                    //se utiliza paras vincular la variable $id con el :id de la consulta
+                    //se utiliza paras vincular la variable $id con el :id de la consulta PDO:: para lanzar la excepcion en caso de error 
                     $stmt->bindParam(':id', $id, PDO::PARAM_STR);
                     try{
-                        //validamos si la consulrta esta preparada para ejecutarla
+                        //validamos si la consulta esta preparada para ejecutarla
                         if ($stmt->execute()) {
                             echo "Usuario eliminado con éxito";
                             echo '<script>window.location.href = "gestion_empresas.php";</script>';

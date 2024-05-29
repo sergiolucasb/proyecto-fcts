@@ -144,11 +144,14 @@
                     <p>Preferencia</p>
                 </div>
                 <?php
+                //hacemos el bucle while ejecuta hasta que traiga consultas
                 while ($row = $consulta->fetch()) {
                     echo "<div>";
+                    //listamos nombre y telefono recogido por la consulta del select
                     echo "<p>" . $row['nombre'] . "</p>";
                     echo "<p>" . $row['telefono'] . "</p>";
                     echo "<a href='#'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill='#000000' d='M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64h96v80c0 6.1 3.4 11.6 8.8 14.3s11.9 2.1 16.8-1.5L309.3 416H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64z'/></svg></a>";
+                    //no tiene ninguna funcionalidada 'TODO'
                     echo "<select name='preferencia'>";
                     echo "<option value='1'>1</option>";
                     echo "<option value='2'>2</option>";

@@ -31,6 +31,7 @@
 
             // Verificar si el usuario es alumno
             $sql = $conexion->query("SELECT * FROM alumno WHERE email='$email' AND pasword='$password'");
+            
             if ($datos = $sql->fetch(PDO::FETCH_ASSOC)) {
                 session_start();
                 $_SESSION['email'] = $email;
