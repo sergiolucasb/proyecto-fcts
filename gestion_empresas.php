@@ -17,35 +17,38 @@
     $user = 'root';
     $pass = '';
 
+    //crear conexión
     try {
-        //creamos la conexion mediante pdo a base de datos
+        //crear variable pdo para conexión
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-        
-        //objeto pdo y es como que utiliza la funcion setatribute, PDO::ATTR_ERRMODE, los dos puntos significa static final, y sirven como para manejar los errores
+        //función setattribute sobre variable pdo
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
-    
-    $id = $_GET['id'] ?? null;
-    $terminos_de_busqueda = $_POST['buscar'] ?? null;
-    
-    //creamos la consulta dentro de la variable 
-    $sql = "SELECT nombre, telefono, cif FROM empresa where true";
 
-    $datos = [];
+        
+    //obtener filtros de búsqueda
+    $terminos_de_busqueda = $_POST['buscar'] ?? null;
+
+    //mostrar empresas
+    $sql = "SELECT nombre, telefono, cif FROM empresa where true";
+    $datos = []; //iniciar array de datos
+
+    
+    //total empresas / resultados por página
 
     $pagina_actual = $_POST['pagina_deseada'] ?? 1;
-
-
-    //para calcular el total de paginas
+    //sql para calcular el total de empresas
     $total_resultados = $pdo->prepare("SELECT COUNT(*) FROM empresa");
     $total_resultados->execute();
+    //total de empresas en variable
     $total_empresas = $total_resultados->fetchColumn();
     $resultados_por_pagina = 10;
 
     $total_paginas = ceil($total_empresas / $resultados_por_pagina);
 
+    //recoger botones previo / siguiente
     $pagina_primera = $_POST['pagina_primera'] ?? null;
     $pagina_anterior = $_POST['pagina_anterior'] ?? null;
     $pagina_siguiente = $_POST['pagina_siguiente'] ?? null;
@@ -53,8 +56,10 @@
     $pagina_deseada = $_POST['pagina_desada'] ?? $pagina_actual;
     $paginador_submit = $_POST['paginador_submit'] ?? null;
 
+    //botón de salir
     $logout = $_POST['logout'] ?? null;
 
+    //cerrar sesión
     if (!empty($logout)) {
         header('Location: login.php');
         session_destroy();
@@ -65,12 +70,14 @@
     }
 
     if (!empty($pagina_anterior)) {
+        //comprobar que no sea la primera página
         if ($pagina_actual != 1) {
             $pagina_actual = $pagina_actual - 1;
         }
     }
 
     if (!empty($pagina_siguiente)) {
+        //comprobar que no sea la última página
         if ($pagina_actual != $total_paginas) {
             $pagina_actual = $pagina_actual + 1;
         } else {
@@ -86,22 +93,51 @@
         $pagina_actual = $pagina_deseada;
     }
 
-
+    //se ha pulsado en buscar
     if (isset($_POST['buscar_submit'])) {
-        // El formulario de búsqueda se envió
+        //si tiene algo escrito
         if (!empty($terminos_de_busqueda)) {
-            // Si se proporciona un término de búsqueda, puedes utilizarlo para buscar tanto por nombre de empresa como por CIF.
+            //compara nombre o cif
             $sql .= " AND (nombre LIKE :nombre OR cif LIKE :cif)";
             $datos[':nombre'] = '%' . $terminos_de_busqueda . '%';
             $datos[':cif'] = '%' . $terminos_de_busqueda . '%';
         }
     }
 
+    $id = $_POST['id'] ?? null;
 
+    //ELIMINAR
+    if (isset($_POST['eliminar'])) {
+        //consulta delete
+        $sql_delete = "DELETE FROM empresa WHERE nombre = :id"; 
+       
+        $consulta_delete = $pdo->prepare($sql_delete);
+        //se utiliza paras vincular la variable $id con el :id de la consulta
+        $datos[':id'] = $id;
+        try{
+            //validamos si la consulrta esta preparada para ejecutarla
+            if ($consulta_delete->execute($datos)) {
+                echo "Usuario eliminado con éxito";
+                echo '<script>window.location.href = "gestion_empresas.php";</script>';
+            }
+            //capturamos la excepcion
+        }catch(PDOException $e){
+            //Utilizo el codigo del error 2300 ya que es esa la excepcion que manda
+        if ($e->errorInfo[0] === '23000') {
+            //aqui muestro el mensaje que yo quiero es decir si no se puede elimnar por tema de foreing key
+            echo "No se puede eliminar";
+        } else {
+            //le muestro otro error alternativo en caso de que sea otra 
+            echo "Error al eliminar la empresa";
+        }
+        }
+    }
+
+    //desde variable páginas, resultados por página
     $variable_paginas = ($pagina_actual - 1) * $resultados_por_pagina;
-
     $sql .= " LIMIT $variable_paginas, $resultados_por_pagina";
 
+    //ejecutar consulta select
     $consulta = $pdo->prepare($sql);
     $consulta->execute($datos);
     ?>
@@ -146,38 +182,11 @@
                     echo "<p>" . $row['telefono'] . "</p>";
                     echo "<a href='nueva_empresa.php?id=".$row['nombre']."'>Modificar</a>";
                     // Agregar un formulario para cada botón de eliminar
-                    echo "<form action='gestion_empresas.php' method='POST' style='display:inline;'>";
+                    echo "<form action='gestion_empresas.php' method='POST'>";
                     echo "<input type='hidden' name='id' value='" . $row['nombre'] . "'>";
                     echo "<input type='submit' name='eliminar' value='Eliminar'>";
                     echo "</form>";
                     echo "</div>";
-                }
-
-                if (isset($_POST['eliminar'])) {
-                    $id = $_POST['id'];
-                    //consulta
-                    $sql = "DELETE FROM empresa WHERE nombre = :id"; 
-                   
-                    $stmt = $pdo->prepare($sql);
-                    //se utiliza paras vincular la variable $id con el :id de la consulta PDO:: para lanzar la excepcion en caso de error 
-                    $stmt->bindParam(':id', $id, PDO::PARAM_STR);
-                    try{
-                        //validamos si la consulta esta preparada para ejecutarla
-                        if ($stmt->execute()) {
-                            echo "Usuario eliminado con éxito";
-                            echo '<script>window.location.href = "gestion_empresas.php";</script>';
-                        }
-                        //capturamos la excepcion
-                    }catch(PDOException $e){
-                        //Utilizo el codigo del error 2300 ya que es esa la excepcion que manda
-                    if ($e->errorInfo[0] === '23000') {
-                        //aqui muestro el mensaje que yo quiero es decir si no se puede elimnar por tema de foreing key
-                        echo "No se puede eliminar";
-                    } else {
-                        //le muestro otro error alternativo en caso de que sea otra 
-                        echo "Error al eliminar la empresa";
-                    }
-                    }
                 }
 
                 ?>

@@ -11,49 +11,60 @@
 </head>
 <body>
 <?php
-
    $host = "localhost";
    $dbname = "proyect-fcts";
    $user = 'root';
    $pass='';
 
+   $error = "";
 
-   try {
-    $conexion = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    try {
+        $conexion = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    if (!empty($_POST["btnacceder"])) {
-        if (empty($_POST["email"]) || empty($_POST["pasword"])) {
-            echo 'Los campos están vacíos';
-        } else {
-            $email = $_POST["email"];
-            $password = $_POST["pasword"];
+        //si pulsa
+        if (!empty($_POST["btnacceder"])) {
+            //si los campos están vacíos
+            if (empty($_POST["email"]) || empty($_POST["pasword"])) {
+                $error = 'Los campos están vacíos';
 
-            // Verificar si el usuario es alumno
-            $sql = $conexion->query("SELECT * FROM alumno WHERE email='$email' AND pasword='$password'");
-            
-            if ($datos = $sql->fetch(PDO::FETCH_ASSOC)) {
-                session_start();
-                $_SESSION['email'] = $email;
-                header("Location: listado_empresas.php");
-                exit();
+            //si los campos están llenos    
             } else {
-                // Si no es alumno, verificar si es tutor
-                $sql = $conexion->query("SELECT * FROM tutor WHERE email='$email' AND pasword='$password'");
-                if ($datos = $sql->fetch(PDO::FETCH_ASSOC)) {
+                //recoger datos del formulario
+                $email = $_POST["email"];
+                $password = $_POST["pasword"];
+
+                //comprobar que es alumno
+                $sql = "SELECT * FROM alumno WHERE email='$email' AND pasword='$password'";
+                $consulta = $conexion->prepare($sql);
+                $consulta->execute();
+                if ($datos = $consulta->fetch(PDO::FETCH_ASSOC)) {
                     session_start();
                     $_SESSION['email'] = $email;
-                    header("Location: gestion_empresas.php");
+                    header("Location: listado_empresas.php");
                     exit();
                 } else {
-                    echo 'Usuario o contraseña incorrectos';
+                    //comprobar que es tutor
+                    $sql = "SELECT * FROM tutor WHERE email='$email' AND pasword='$password'";
+                    $consulta = $conexion->prepare($sql);
+                    $consulta->execute();
+                    if ($datos = $consulta->fetch(PDO::FETCH_ASSOC)) {
+                        session_start();
+                        $_SESSION['email'] = $email;
+                        header("Location: gestion_empresas.php");
+                        exit();
+                    } else {
+                        $error = 'Usuario o contraseña incorrectos';
+                    }
                 }
             }
         }
+
+    } catch (PDOException $e) {
+        echo $e->getMessage();
     }
-} catch (PDOException $e) {
-    echo $e->getMessage();
-}
+
+    
 ?>
     <header>
         <nav>
@@ -71,6 +82,9 @@
             <input type="text" id="email" name="email" placeholder="Introduce tu correo...">
             <input type="password" id="pasword" name="pasword" placeholder="Introduce tu contraseña...">
             <input type="submit" name="btnacceder" value="Entrar">
+            <?php
+            echo $error;
+            ?>
         </form> 
     </section>
     <footer>
