@@ -132,7 +132,7 @@
 
         
         ?>
-        <input type="text" placeholder="Nombre de la empresa..." name="nombre_empresa" value="<?php echo $nombre_empresa?>">
+        <input type="text" placeholder="Nombre de la empresa..." name="nombre_empresa" value="<?php echo $nombre_empresa?>" required>
         <input type="text" placeholder="CIF..." name="cif" value="<?php echo $cif?>">
         <input type="text" name="nombre_fiscal" placeholder="Nombre fiscal..." value="<?php echo $nombre_fiscal ?>">
         <input type="text" name="email" placeholder="Correo electrónico..." value="<?php echo $email ?>">

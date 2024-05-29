@@ -35,7 +35,6 @@
     $sql = "SELECT nombre, telefono, cif FROM empresa where true";
     $datos = []; //iniciar array de datos
 
-
     
     //total empresas / resultados por página
 
@@ -94,11 +93,11 @@
         $pagina_actual = $pagina_deseada;
     }
 
-
+    //se ha pulsado en buscar
     if (isset($_POST['buscar_submit'])) {
-        // El formulario de búsqueda se envió
+        //si tiene algo escrito
         if (!empty($terminos_de_busqueda)) {
-            // Si se proporciona un término de búsqueda, puedes utilizarlo para buscar tanto por nombre de empresa como por CIF.
+            //compara nombre o cif
             $sql .= " AND (nombre LIKE :nombre OR cif LIKE :cif)";
             $datos[':nombre'] = '%' . $terminos_de_busqueda . '%';
             $datos[':cif'] = '%' . $terminos_de_busqueda . '%';
@@ -136,7 +135,6 @@
 
     //desde variable páginas, resultados por página
     $variable_paginas = ($pagina_actual - 1) * $resultados_por_pagina;
-
     $sql .= " LIMIT $variable_paginas, $resultados_por_pagina";
 
     //ejecutar consulta select
