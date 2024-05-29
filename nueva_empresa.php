@@ -91,6 +91,8 @@
                 echo $nombre_empresa;
                 $consulta = $pdo->prepare($sql);
                 $consulta->execute($datos);
+                header("Location: gestion_empresas.php");
+                exit; 
             } else {
                 $error = true;
             }
@@ -104,6 +106,8 @@
                 echo $nombre_empresa;
                 $consulta_update = $pdo->prepare($sql_update);
                 $consulta_update->execute($datos);
+                header("Location: gestion_empresas.php");
+                exit;
             } else {
                 $error = true;
             }
