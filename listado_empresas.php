@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,21 +24,19 @@
         echo "Se ha producido un error al intentar conectar al servidor MySQL: " . $e->getMessage();
     }
 
-    
+
     if (!isset($_SESSION['email'])) {
         header("Location: login.php");
-        exit(); 
+        exit();
     }
 
     $nombre_empresa = $_POST['nombre_empresa'] ?? null;
+    $cif = $_POST['cif'] ?? null;
+    $terminos_de_busqueda = $_POST['buscar'] ?? null;
 
-    $sql = "SELECT nombre, telefono FROM empresa where true";
+    $sql = "SELECT nombre, telefono, cif FROM empresa where true";
     $datos = [];
 
-    if (!empty($nombre_empresa)) {
-        $sql .= " and nombre like :nombre";
-        $datos[':nombre'] = '%' . $nombre_empresa . '%';
-    }
 
     $pagina_actual = $_POST['pagina_deseada'] ?? 1;
     //para calcular el total de paginas
@@ -54,7 +51,7 @@
     $pagina_anterior = $_POST['pagina_anterior'] ?? null;
     $pagina_siguiente = $_POST['pagina_siguiente'] ?? null;
     $pagina_ultima = $_POST['pagina_ultima'] ?? null;
-    $pagina_deseada = $_POST['pagina_desada'] ?? $pagina_actual;
+    $pagina_deseada = $_POST['pagina_deseada'] ?? $pagina_actual;
     $paginador_submit = $_POST['paginador_submit'] ?? null;
 
     $logout = $_POST['logout'] ?? null;
@@ -90,14 +87,25 @@
         $pagina_actual = $pagina_deseada;
     }
 
-    $variable_paginas = ($pagina_actual - 1) * $resultados_por_pagina;
+    
+    if (isset($_POST['buscar_submit'])) {
+        // El formulario de búsqueda se envió
+        if (!empty($terminos_de_busqueda)) {
+            // Si se proporciona un término de búsqueda, puedes utilizarlo para buscar tanto por nombre de empresa como por CIF.
+            $sql .= " AND (nombre LIKE :nombre OR cif LIKE :cif)";
+            $datos[':nombre'] = '%' . $terminos_de_busqueda . '%';
+            $datos[':cif'] = '%' . $terminos_de_busqueda . '%';
+        }
+    }
 
+
+    $variable_paginas = ($pagina_actual - 1) * $resultados_por_pagina;
     $sql .= " LIMIT $variable_paginas, $resultados_por_pagina";
 
     $consulta = $pdo->prepare($sql);
     $consulta->execute($datos);
 
-   
+
     ?>
 </head>
 
@@ -123,8 +131,9 @@
         <h2>Listado de empresas</h2>
         <form action="listado_empresas.php" method="post">
             <article id="filtros_busqueda">
-                <input type="text" placeholder="Buscar por nombre" name="nombre_empresa">
-                <input type="submit" value="Buscar" name="filtros_submit">
+                <input type="text" placeholder="Buscar empresa" name="buscar">
+                <input type="submit" value="bucar" name="buscar_submit">
+
             </article>
 
             <article id="listado">
@@ -155,7 +164,7 @@
                     echo "</select>";
                     echo "</div>";
                 }
-                
+
                 ?>
 
             </article>
@@ -184,4 +193,5 @@
         <img src="img/logo-el-campico.png" alt="Logo EFA El Campico">
     </footer>
 </body>
+
 </html>
