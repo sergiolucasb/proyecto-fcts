@@ -134,8 +134,7 @@
         <form action="listado_empresas.php" method="post">
             <article id="filtros_busqueda">
                 <input type="text" placeholder="Buscar empresa" name="buscar">
-                <input type="submit" value="bucar" name="buscar_submit">
-
+                <input type="submit" value="Buscar" name="buscar_submit">
             </article>
 
             <article id="listado">
@@ -147,31 +146,28 @@
                 </div>
                 <?php
                 //hacemos el bucle while ejecuta hasta que traiga consultas
-                while ($row = $consulta->fetch()) {
-                    echo "<div>";
-                    //listamos nombre y telefono recogido por la consulta del select
-                    echo "<p>" . $row['nombre'] . "</p>";
-                    echo "<p>" . $row['telefono'] . "</p>";
-                    echo "<a href='#'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill='#000000' d='M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64h96v80c0 6.1 3.4 11.6 8.8 14.3s11.9 2.1 16.8-1.5L309.3 416H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64z'/></svg></a>";
-                    //TODO funcionalidad preferencia
-                    echo "<select name='preferencia'>";
-                    echo "<option value='1'>1</option>";
-                    echo "<option value='2'>2</option>";
-                    echo "<option value='3'>3</option>";
-                    echo "<option value='4'>4</option>";
-                    echo "<option value='5'>5</option>";
-                    echo "<option value='6'>6</option>";
-                    echo "<option value='7'>7</option>";
-                    echo "<option value='8'>8</option>";
-                    echo "<option value='8'>8</option>";
-                    echo "<option value='9'>9</option>";
-                    echo "<option value='10'>10</option>";
-                    echo "</select>";
-                    echo "</div>";
+                while ($row = $consulta->fetch()) { ?>
+                    <div>
+                        <p><?php echo $row['nombre'] ?> </p>
+                        <p><?php echo $row['telefono'] ?></p>
+                        <a href='#'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill='#000000' d='M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64h96v80c0 6.1 3.4 11.6 8.8 14.3s11.9 2.1 16.8-1.5L309.3 416H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64z'/></svg></a>
+                        <select name='preferencia'>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                            <option value='8'>8</option>
+                            <option value='8'>8</option>
+                            <option value='9'>9</option>
+                            <option value='10'>10</option>
+                        </select>
+                    </div>
+                <?php
                 }
-
                 ?>
-
             </article>
 
             <article id="paginador">
