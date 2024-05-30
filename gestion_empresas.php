@@ -180,7 +180,7 @@
                     <div>
                     <p> <?php echo $row['nombre'] ?> </p>
                     <p> <?php echo $row['telefono'] ?> </p>
-                    <a href='nueva_empresa.php?id=".$row['nombre']."'>Modificar</a>
+                    <a href='nueva_empresa.php?id=<?php echo $row['nombre']?>'>Modificar</a>
                     <form action='gestion_empresas.php' method='POST'>
                         <input type='hidden' name='id' value='<?php echo $row['nombre'] ?>'>
                         <input type='submit' name='eliminar' value='Eliminar'>
