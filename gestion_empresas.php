@@ -176,17 +176,18 @@
                     <p>Eliminar</p>
                 </div>
                 <?php
-                while ($row = $consulta->fetch()) {
-                    echo "<div>";
-                    echo "<p>" . $row['nombre'] . "</p>";
-                    echo "<p>" . $row['telefono'] . "</p>";
-                    echo "<a href='nueva_empresa.php?id=".$row['nombre']."'>Modificar</a>";
-                    // Agregar un formulario para cada botón de eliminar
-                    echo "<form action='gestion_empresas.php' method='POST'>";
-                    echo "<input type='hidden' name='id' value='" . $row['nombre'] . "'>";
-                    echo "<input type='submit' name='eliminar' value='Eliminar'>";
-                    echo "</form>";
-                    echo "</div>";
+                while ($row = $consulta->fetch()) { ?>
+                    <div>
+                    <p> <?php echo $row['nombre'] ?> </p>
+                    <p> <?php echo $row['telefono'] ?> </p>
+                    <a href='nueva_empresa.php?id=".$row['nombre']."'>Modificar</a>
+                    <form action='gestion_empresas.php' method='POST'>
+                        <input type='hidden' name='id' value='<?php echo $row['nombre'] ?>'>
+                        <input type='submit' name='eliminar' value='Eliminar'>
+                    </form>
+                    </div>
+                
+                <?php
                 }
 
                 ?>
